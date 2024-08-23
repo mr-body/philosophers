@@ -6,7 +6,7 @@
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:23 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/23 13:21:25 by waalexan         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:28:33 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	ft_valid_arg(int ac, char **av, t_program *program)
 {
 	if (ac > 6 || ac < 5)
 	{
-		printf("Usage: %s philo dead eat sleep snack\n", av[0]);
+		printf("Usage: %s philo dead eat sleep [snack]\n", av[0]);
 		exit(1);
 	}
 	program->n_philo = atoi(av[1]);
@@ -25,14 +25,16 @@ static void	ft_valid_arg(int ac, char **av, t_program *program)
 	program->t_sleep = atoi(av[4]);
 	program->time = ft_timestamp();
 	if (ac == 6)
+	{
 		program->n_snack = atoi(av[5]);
+		if (program->n_snack <= 0)
+		{
+			printf("The number of snacks must be positive\n");
+			exit(1);
+		}
+	}
 	else
 		program->n_snack = 0;
-	if (program->n_snack <= 0)
-	{
-		printf("The number of snacks must be positive\n");
-		exit(1);
-	}
 }
 
 int	main(int ac, char **av)

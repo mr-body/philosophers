@@ -6,7 +6,7 @@
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:46:12 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/23 13:56:04 by waalexan         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:00:16 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	ft_init_philo(t_philo *philo, pthread_mutex_t *fork,
 	}
 }
 
-void	ft_init_mutex(pthread_mutex_t *messager,
-		pthread_mutex_t *fork, int n_philo)
+void	ft_init_mutex(pthread_mutex_t *messager, pthread_mutex_t *fork,
+		int n_philo)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 14:17:54 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/23 14:21:21 by waalexan         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:01:26 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ unsigned long	display_time(t_philo *philo)
 void	ft_messager(t_philo *philo, char *info, char *icon)
 {
 	pthread_mutex_lock(philo->messager);
-	printf("%s %ldms Philo %d %s\n", icon, display_time(philo), philo->id, info);
+	printf("%s %ldms Philo %d %s\n", icon, display_time(philo), philo->id,
+		info);
 	pthread_mutex_unlock(philo->messager);
 }
