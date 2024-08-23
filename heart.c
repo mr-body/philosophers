@@ -6,7 +6,7 @@
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:56:42 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/23 14:14:32 by waalexan         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:25:34 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,31 @@ void	*ft_routine(void *ptr)
 	return (NULL);
 }
 
-void	*ft_monitoring(void *ptr)
+static void	ft_all_done(t_program *program, t_philo *philos)
 {
 	int	i;
-	int	all_done;
+
+	i = 0;
+	while (i < program->n_philo)
+	{
+		if (philos[i].eaten < program->n_snack)
+			return ;
+		i++;
+	}
+	if (program->n_snack > 0)
+	{
+		printf("🎉 all done eaten \nREPORT\n");
+		i = -1;
+		while (++i < program->n_philo)
+			printf("philo number %d eaten %d snack\n", philos[i].id,
+				philos[i].eaten);
+		exit(0);
+	}
+}
+
+void	*ft_monitoring(void *ptr)
+{
+	int				i;
 	unsigned long	current_time;
 	t_philo			*philos;
 	t_program		*program;
@@ -52,37 +73,15 @@ void	*ft_monitoring(void *ptr)
 		while (i < program->n_philo)
 		{
 			current_time = ft_timestamp();
-			if (current_time - philos[i].last_snack
-				> (unsigned long)program->t_dead)
+			if (current_time
+				- philos[i].last_snack > (unsigned long)program->t_dead)
 			{
-				pthread_mutex_lock(philos[i].messager);
-				printf("💀 %ldms Philo %d morreu\n",
-					display_time(&philos[i]), philos[i].id);
-				pthread_mutex_unlock(philos[i].messager);
+				ft_messager(philos, "morreu", "💀");
 				exit(1);
 			}
 			i++;
 		}
-		all_done = 0;
-		i = 0;
-		while (i < program->n_philo)
-		{
-			if (philos[i].eaten < program->n_snack)
-			{
-				all_done = 1;
-				break ;
-			}
-			i++;
-		}
-		if (!all_done && program->n_snack > 0)
-		{
-			printf("🎉 all done eaten \nREPORT\n");
-			i = -1;
-			while (++i < program->n_philo)
-				printf("philo number %d eaten %d snack\n",
-					philos[i].id, philos[i].eaten);
-			exit(0);
-		}
+		ft_all_done(program, philos);
 		usleep(1000);
 	}
 	return (NULL);
