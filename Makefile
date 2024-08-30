@@ -6,13 +6,13 @@
 #    By: waalexan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/23 14:35:42 by waalexan          #+#    #+#              #
-#    Updated: 2024/08/23 14:35:44 by waalexan         ###   ########.fr        #
+#    Updated: 2024/08/30 08:30:52 by waalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philosophers
 CC = cc
-FLAG = -W -W -W
+FLAG = -Wall -Wextra -Werror
 SRC = heart.c main.c util.c thread.c
 OBJDIR = OBJS
 OBJ = $(patsubst %.c,$(OBJDIR)/%.o,$(SRC))

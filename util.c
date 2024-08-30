@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 14:17:54 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/23 11:01:26 by waalexan         ###   ########.fr       */
+/*   Created: 2024/08/29 08:54:50 by waalexan          #+#    #+#             */
+/*   Updated: 2024/08/29 08:54:51 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,11 @@ unsigned long	ft_timestamp(void)
 	unsigned long	s;
 	unsigned long	u;
 
-	gettimeofday(&timespamp, NULL);
+	if (gettimeofday(&timespamp, NULL) != 0)
+	{
+		perror("Failed to get time");
+		exit(EXIT_FAILURE);
+	}
 	s = (timespamp.tv_sec * 1000);
 	u = (timespamp.tv_usec / 1000);
 	l = s + u;

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 13:56:42 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/23 11:25:34 by waalexan         ###   ########.fr       */
+/*   Created: 2024/08/29 08:55:05 by waalexan          #+#    #+#             */
+/*   Updated: 2024/08/30 08:39:27 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@ void	*ft_routine(void *ptr)
 	while (1)
 	{
 		pthread_mutex_lock(philo->fork_left);
-		ft_messager(philo, "pegou o garfo da esquerda", "🍴");
-		pthread_mutex_lock(philo->fork_rigth);
-		ft_messager(philo, "pegou o garfo da direita", "🍴");
+		ft_messager(philo, "took the left fork", "🍴");
+		pthread_mutex_lock(philo->fork_right);
+		ft_messager(philo, "took the right fork", "🍴");
 		philo->eaten++;
-		ft_messager(philo, "Está comendo", "🍜");
+		ft_messager(philo, "is eating", "🍜");
 		usleep(philo->program->t_eat * 1000);
 		philo->last_snack = ft_timestamp();
-		pthread_mutex_unlock(philo->fork_rigth);
+		pthread_mutex_unlock(philo->fork_right);
 		pthread_mutex_unlock(philo->fork_left);
-		ft_messager(philo, "Está Dormindo", "💤");
+		ft_messager(philo, "is sleeping", "💤");
 		usleep(philo->program->t_sleep * 1000);
-		ft_messager(philo, "Está Pensando", "🧠");
+		ft_messager(philo, "is thinking", "🧠");
 	}
 	return (NULL);
 }
@@ -49,40 +49,39 @@ static void	ft_all_done(t_program *program, t_philo *philos)
 	}
 	if (program->n_snack > 0)
 	{
-		printf("🎉 all done eaten \nREPORT\n");
-		i = -1;
-		while (++i < program->n_philo)
-			printf("philo number %d eaten %d snack\n", philos[i].id,
+		printf("🎉 Everyone ate food \nSummary\n");
+		i = 0;
+		while (i < program->n_philo)
+		{
+			printf("Philo number %d eaten %d snack\n", philos[i].id,
 				philos[i].eaten);
+			i++;
+		}
 		exit(0);
 	}
 }
 
-void	*ft_monitoring(void *ptr)
+int	ft_monitoring(t_philo *philos)
 {
-	int				i;
-	unsigned long	current_time;
-	t_philo			*philos;
-	t_program		*program;
+	int			i;
+	t_program	*program;
 
-	philos = (t_philo *)ptr;
 	program = philos[0].program;
 	while (1)
 	{
 		i = 0;
 		while (i < program->n_philo)
 		{
-			current_time = ft_timestamp();
-			if (current_time
+			if (ft_timestamp()
 				- philos[i].last_snack > (unsigned long)program->t_dead)
 			{
-				ft_messager(philos, "morreu", "💀");
-				exit(1);
+				ft_messager(&philos[i], "is dead", "💀");
+				return (1);
 			}
 			i++;
 		}
 		ft_all_done(program, philos);
 		usleep(1000);
 	}
-	return (NULL);
+	return (0);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 14:23:48 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/23 11:00:50 by waalexan         ###   ########.fr       */
+/*   Created: 2024/08/29 08:54:55 by waalexan          #+#    #+#             */
+/*   Updated: 2024/08/30 08:39:16 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
-# include <sys/types.h>
 # include <unistd.h>
 
 typedef struct s_program
@@ -27,7 +26,6 @@ typedef struct s_program
 	int				t_dead;
 	int				t_eat;
 	int				n_snack;
-	int				case_five;
 	unsigned long	time;
 }					t_program;
 
@@ -37,7 +35,7 @@ typedef struct s_philo
 	unsigned long	last_snack;
 	int				eaten;
 	pthread_mutex_t	*fork_left;
-	pthread_mutex_t	*fork_rigth;
+	pthread_mutex_t	*fork_right;
 	pthread_mutex_t	*messager;
 	t_program		*program;
 }					t_philo;
@@ -46,7 +44,7 @@ unsigned long		display_time(t_philo *philo);
 unsigned long		ft_timestamp(void);
 
 void				*ft_routine(void *ptr);
-void				*ft_monitoring(void *ptr);
+int					ft_monitoring(t_philo *philos);
 void				ft_messager(t_philo *philo, char *info, char *icon);
 
 void				ft_init_philo(t_philo *philo, pthread_mutex_t *fork,
