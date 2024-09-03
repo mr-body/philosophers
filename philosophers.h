@@ -7,6 +7,8 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+#define MAX_PHILO 200
+
 typedef struct s_program
 {
     int             n_philo;
@@ -55,6 +57,7 @@ int               get_is_dead(t_program *program);
 int               get_n_snack(t_program *program);
 int               get_n_philo(t_program *program);
 int               get_t_dead(t_program *program);
+int	ft_atoi(char *str);
 int get_eaten(t_philo *philo);
 void set_eaten(t_philo *philo, int value);
 unsigned long     get_last_snack(t_philo *philo);

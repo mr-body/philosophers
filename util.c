@@ -12,6 +12,48 @@
 
 #include "philosophers.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+static int ft_varg(char *s)
+{
+    if (*s == '+')
+        s++;
+    while (*s)
+    {
+        if (!(*s >= '0' && *s <= '9'))
+            return 1;
+        s++;
+    }
+    return 0;
+}
+
+int ft_atoi(char *str)
+{
+    int result = 0;
+    int sign = 1;
+
+    if (ft_varg(str))
+    {
+        printf("error: invalid argument\n");
+        exit(1);
+    }
+    while (*str == ' ' || (*str >= 9 && *str <= 13)) // Ignora espaços em branco
+        str++;
+    if (*str == '-')
+        sign = -1;
+    if (*str == '-' || *str == '+')
+        str++;
+    while (*str >= '0' && *str <= '9')
+    {
+        result = result * 10 + (*str - '0');
+        str++;
+    }
+    return (sign * result);
+}
+
+
 unsigned long	ft_timestamp(void)
 {
 	struct timeval	timespamp;

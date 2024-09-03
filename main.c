@@ -12,37 +12,37 @@
 
 #include "philosophers.h"
 
+static void ft_exit_arg(int code)
+{
+	if(code == 501)
+		printf("use: ./philosophers philo dead eat sleep [snack]\n");
+	else if(code == 502)
+		printf("The Philo number cannot exceed 200\n");
+	else if(code == 503)
+		printf("The number of snacks must be positive or greater than 0\n");
+	exit(1);
+}
+
 static void	ft_valid_arg(int ac, char **av, t_program *program)
 {
 	if (ac > 6 || ac < 5)
-	{
-		printf("Usage: %s philo dead eat sleep [snack]\n", av[0]);
-		exit(EXIT_FAILURE);
-	}
-	program->n_philo = atoi(av[1]);
-	program->t_dead = atoi(av[2]);
-	program->t_eat = atoi(av[3]);
-	program->t_sleep = atoi(av[4]);
+		ft_exit_arg(501);
+	if((ft_atoi(av[1]) > MAX_PHILO))
+		ft_exit_arg(502);
+	program->n_philo = ft_atoi(av[1]);
+	program->t_dead = ft_atoi(av[2]);
+	program->t_eat = ft_atoi(av[3]);
+	program->t_sleep = ft_atoi(av[4]);
 	program->time = ft_timestamp();
 	program->is_dead = 0;
 	if (ac == 6)
 	{
-		program->n_snack = atoi(av[5]);
+		program->n_snack = ft_atoi(av[5]);
 		if (program->n_snack <= 0)
-		{
-			printf("The number of snacks must be positive or greater than 0\n");
-			exit(EXIT_FAILURE);
-		}
+			ft_exit_arg(503);
 	}
 	else
 		program->n_snack = 0;
-	// if(program->n_philo == 1)
-	// {
-	// 	printf("🍴 %ldms Philo 1 took the left fork\n", ft_timestamp() - program->time);
-	// 	usleep(program->is_dead * 1000);
-	// 	printf("🍴 %ldms Philo 1 is dead\n", ft_timestamp() - program->time);
-	// 	exit(1);
-	// }
 }
 
 int	main(int ac, char **av)
