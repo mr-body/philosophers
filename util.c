@@ -6,53 +6,53 @@
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 08:54:50 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/29 08:54:51 by waalexan         ###   ########.fr       */
+/*   Updated: 2024/09/03 09:14:59 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 
-static int ft_varg(char *s)
+static int	ft_varg(char *s)
 {
-    if (*s == '+')
-        s++;
-    while (*s)
-    {
-        if (!(*s >= '0' && *s <= '9'))
-            return 1;
-        s++;
-    }
-    return 0;
+	if (*s == '+')
+		s++;
+	while (*s)
+	{
+		if (!(*s >= '0' && *s <= '9'))
+			return (1);
+		s++;
+	}
+	return (0);
 }
 
-int ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
-    int result = 0;
-    int sign = 1;
+	int	result;
+	int	sign;
 
-    if (ft_varg(str))
-    {
-        printf("error: invalid argument\n");
-        exit(1);
-    }
-    while (*str == ' ' || (*str >= 9 && *str <= 13)) // Ignora espaços em branco
-        str++;
-    if (*str == '-')
-        sign = -1;
-    if (*str == '-' || *str == '+')
-        str++;
-    while (*str >= '0' && *str <= '9')
-    {
-        result = result * 10 + (*str - '0');
-        str++;
-    }
-    return (sign * result);
+	result = 0;
+	sign = 1;
+	if (ft_varg(str))
+	{
+		printf("error: invalid argument\n");
+		exit(1);
+	}
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	if (*str == '-')
+		sign = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	while (*str >= '0' && *str <= '9')
+	{
+		result = result * 10 + (*str - '0');
+		str++;
+	}
+	return (sign * result);
 }
-
 
 unsigned long	ft_timestamp(void)
 {
@@ -80,11 +80,10 @@ unsigned long	display_time(t_philo *philo)
 void	ft_messager(t_philo *philo, char *info, char *icon)
 {
 	pthread_mutex_lock(philo->messager);
-	if(!get_is_dead(philo->program))
+	if (!get_is_dead(philo->program))
 	{
 		printf("%s %ldms Philo %d %s\n", icon, display_time(philo), philo->id,
 			info);
 	}
 	pthread_mutex_unlock(philo->messager);
 }
-

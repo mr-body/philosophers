@@ -6,19 +6,19 @@
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 08:55:39 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/30 08:45:14 by waalexan         ###   ########.fr       */
+/*   Updated: 2024/09/03 09:10:25 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void ft_exit_arg(int code)
+static void	ft_exit_arg(int code)
 {
-	if(code == 501)
+	if (code == 501)
 		printf("use: ./philosophers philo dead eat sleep [snack]\n");
-	else if(code == 502)
+	else if (code == 502)
 		printf("The Philo number cannot exceed 200\n");
-	else if(code == 503)
+	else if (code == 503)
 		printf("The number of snacks must be positive or greater than 0\n");
 	exit(1);
 }
@@ -27,7 +27,7 @@ static void	ft_valid_arg(int ac, char **av, t_program *program)
 {
 	if (ac > 6 || ac < 5)
 		ft_exit_arg(501);
-	if((ft_atoi(av[1]) > MAX_PHILO))
+	if ((ft_atoi(av[1]) > MAX_PHILO))
 		ft_exit_arg(502);
 	program->n_philo = ft_atoi(av[1]);
 	program->t_dead = ft_atoi(av[2]);

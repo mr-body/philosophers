@@ -6,7 +6,7 @@
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 08:55:24 by waalexan          #+#    #+#             */
-/*   Updated: 2024/08/30 08:25:53 by waalexan         ###   ########.fr       */
+/*   Updated: 2024/09/03 09:45:20 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,27 @@ void	ft_init_philo(t_philo *philo, pthread_mutex_t *fork,
 	}
 }
 
-void ft_init_mutex(pthread_mutex_t *fork, pthread_mutex_t *messager, int n_philo)
+void	ft_init_mutex(pthread_mutex_t *fork, pthread_mutex_t *messager,
+		int n_philo)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (i < n_philo)
-    {
-        if (pthread_mutex_init(&fork[i], NULL) != 0)
-        {
-            perror("Failed to initialize mutex");
-            exit(EXIT_FAILURE);
-        }
-        i++;
-    }
-    if (pthread_mutex_init(messager, NULL) != 0)
-    {
-        perror("Failed to initialize message mutex");
-        exit(EXIT_FAILURE);
-    }
+	i = 0;
+	while (i < n_philo)
+	{
+		if (pthread_mutex_init(&fork[i], NULL) != 0)
+		{
+			perror("Failed to initialize mutex");
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
+	if (pthread_mutex_init(messager, NULL) != 0)
+	{
+		perror("Failed to initialize message mutex");
+		exit(EXIT_FAILURE);
+	}
 }
-
 
 void	ft_pthread_create(pthread_t *thread, t_philo *philo, int n_philo)
 {
@@ -86,31 +86,16 @@ void	ft_join_thread(pthread_t *thread, int n_philo)
 	}
 }
 
-void init_program_mutex(t_program *program)
+void	ft_mutex_destroy(pthread_mutex_t *fork, pthread_mutex_t *messager,
+		int n_philo)
 {
-    if (pthread_mutex_init(&program->program_mutex, NULL) != 0)
-    {
-        perror("Failed to initialize program mutex");
-        exit(EXIT_FAILURE);
-    }
+	int	i;
+
+	i = 0;
+	while (i < n_philo)
+	{
+		pthread_mutex_destroy(&fork[i]);
+		i++;
+	}
+	pthread_mutex_destroy(messager);
 }
-
-void destroy_program_mutex(t_program *program)
-{
-    pthread_mutex_destroy(&program->program_mutex);
-}
-
-void ft_mutex_destroy(pthread_mutex_t *fork, pthread_mutex_t *messager, int n_philo)
-{
-    int i;
-
-    i = 0;
-    while (i < n_philo)
-    {
-        pthread_mutex_destroy(&fork[i]);
-        i++;
-    }
-    pthread_mutex_destroy(messager);
-}
-
-
