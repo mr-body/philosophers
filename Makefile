@@ -13,7 +13,7 @@
 NAME = philosophers
 CC = cc
 FLAG = -Wall -Wextra -Werror
-SRC = heart.c main.c util.c thread.c
+SRC = heart.c main.c util.c thread.c get_set.c
 OBJDIR = OBJS
 OBJ = $(patsubst %.c,$(OBJDIR)/%.o,$(SRC))
 

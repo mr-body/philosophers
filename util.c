@@ -38,7 +38,11 @@ unsigned long	display_time(t_philo *philo)
 void	ft_messager(t_philo *philo, char *info, char *icon)
 {
 	pthread_mutex_lock(philo->messager);
-	printf("%s %ldms Philo %d %s\n", icon, display_time(philo), philo->id,
-		info);
+	if(!get_is_dead(philo->program))
+	{
+		printf("%s %ldms Philo %d %s\n", icon, display_time(philo), philo->id,
+			info);
+	}
 	pthread_mutex_unlock(philo->messager);
 }
+

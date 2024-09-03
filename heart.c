@@ -12,39 +12,64 @@
 
 #include "philosophers.h"
 
-void	*ft_routine(void *ptr)
+static void ft_take_forks(t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)ptr;
-	while (1)
+	if (philo->fork_left < philo->fork_right)
 	{
 		pthread_mutex_lock(philo->fork_left);
 		ft_messager(philo, "took the left fork", "🍴");
 		pthread_mutex_lock(philo->fork_right);
 		ft_messager(philo, "took the right fork", "🍴");
-		philo->eaten++;
-		ft_messager(philo, "is eating", "🍜");
-		usleep(philo->program->t_eat * 1000);
-		philo->last_snack = ft_timestamp();
-		pthread_mutex_unlock(philo->fork_right);
-		pthread_mutex_unlock(philo->fork_left);
-		ft_messager(philo, "is sleeping", "💤");
-		usleep(philo->program->t_sleep * 1000);
-		ft_messager(philo, "is thinking", "🧠");
 	}
-	return (NULL);
+	else
+	{
+		pthread_mutex_lock(philo->fork_right);
+		ft_messager(philo, "took the right fork", "🍴");
+		pthread_mutex_lock(philo->fork_left);
+		ft_messager(philo, "took the left fork", "🍴");
+	}
 }
 
-static void	ft_all_done(t_program *program, t_philo *philos)
+void *ft_routine(void *ptr)
+{
+    t_philo *philo = (t_philo *)ptr;
+
+	if (philo->program->n_philo == 1)
+	{
+		printf("🍴 %ldms Philo %d took a fork\n", display_time(philo), philo->id);
+		usleep(philo->program->t_dead * 1000);
+		printf("💀 %ldms Philo %d is dead\n", display_time(philo), philo->id);
+		set_is_dead(philo->program, 1);
+	}
+    else
+    {
+        while (!get_is_dead(philo->program))
+        {
+            ft_take_forks(philo);
+            set_eaten(philo, get_eaten(philo) + 1);
+            ft_messager(philo, "is eating", "🍜");
+            usleep(philo->program->t_eat * 1000);
+            set_last_snack(philo, ft_timestamp());
+            pthread_mutex_unlock(philo->fork_right);
+            pthread_mutex_unlock(philo->fork_left);
+            ft_messager(philo, "is sleeping", "💤");
+            usleep(philo->program->t_sleep * 1000);
+            ft_messager(philo, "is thinking", "🧠");
+        }
+    }
+    return (NULL);
+}
+
+
+static int	ft_all_done(t_program *program, t_philo *philos)
 {
 	int	i;
 
 	i = 0;
 	while (i < program->n_philo)
 	{
-		if (philos[i].eaten < program->n_snack)
-			return ;
+		if (get_eaten(&philos[i]) < program->n_snack)
+			return 0;
 		i++;
 	}
 	if (program->n_snack > 0)
@@ -57,8 +82,9 @@ static void	ft_all_done(t_program *program, t_philo *philos)
 				philos[i].eaten);
 			i++;
 		}
-		exit(0);
+		return 1;
 	}
+	return 0;
 }
 
 int	ft_monitoring(t_philo *philos)
@@ -67,20 +93,24 @@ int	ft_monitoring(t_philo *philos)
 	t_program	*program;
 
 	program = philos[0].program;
-	while (1)
+	while (!get_is_dead(program))
 	{
 		i = 0;
 		while (i < program->n_philo)
 		{
-			if (ft_timestamp()
-				- philos[i].last_snack > (unsigned long)program->t_dead)
+			if (ft_timestamp() -  get_last_snack(&philos[i]) > (unsigned long)program->t_dead)
 			{
 				ft_messager(&philos[i], "is dead", "💀");
-				return (1);
+				set_is_dead(program, 1);
+				break;
 			}
 			i++;
 		}
-		ft_all_done(program, philos);
+		if(ft_all_done(program, philos))
+		{
+			set_is_dead(program, 1);
+			break;
+		}
 		usleep(1000);
 	}
 	return (0);
