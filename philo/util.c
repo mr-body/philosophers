@@ -77,13 +77,16 @@ unsigned long	display_time(t_philo *philo)
 	return (ft_timestamp() - philo->program->time);
 }
 
-void	ft_messager(t_philo *philo, char *info, char *icon)
+void	ft_messager(t_philo *philo, char *info, char *color)
 {
 	pthread_mutex_lock(philo->messager);
-	if (!get_is_dead(philo->program))
+	if (!get_is_dead(philo->program) && !get_all_eaten(philo->program))
 	{
-		printf("%s %ldms Philo %d %s\n", icon, display_time(philo), philo->id,
-			info);
+		if (get_no_eat(philo) == 0)
+		{
+			printf("%s %ldms %d %s\033[0m\n", color, display_time(philo),
+				philo->id, info);
+		}
 	}
 	pthread_mutex_unlock(philo->messager);
 }

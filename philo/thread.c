@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 08:55:24 by waalexan          #+#    #+#             */
-/*   Updated: 2024/09/03 09:45:20 by waalexan         ###   ########.fr       */
+/*   Created: 2024/09/04 15:01:53 by waalexan          #+#    #+#             */
+/*   Updated: 2024/09/04 15:01:54 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	ft_init_philo(t_philo *philo, pthread_mutex_t *fork,
+void	ft_init_philo(t_philo *philo, pthread_mutex_t *forks,
 		pthread_mutex_t *messager, t_program *program)
 {
 	int	i;
@@ -22,10 +22,10 @@ void	ft_init_philo(t_philo *philo, pthread_mutex_t *fork,
 	{
 		philo[i].id = i + 1;
 		philo[i].eaten = 0;
-		philo[i].fork_left = &fork[i];
+		philo[i].no_eat = 0;
 		philo[i].messager = messager;
-		philo[i].fork_right = &fork[(i + 1) % program->n_philo];
 		philo[i].program = program;
+		philo[i].fork = forks;
 		philo[i].last_snack = ft_timestamp();
 		i++;
 	}

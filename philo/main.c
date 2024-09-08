@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: waalexan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 08:55:39 by waalexan          #+#    #+#             */
-/*   Updated: 2024/09/03 09:10:25 by waalexan         ###   ########.fr       */
+/*   Created: 2024/09/04 15:01:58 by waalexan          #+#    #+#             */
+/*   Updated: 2024/09/04 15:01:59 by waalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	ft_valid_arg(int ac, char **av, t_program *program)
 	program->t_sleep = ft_atoi(av[4]);
 	program->time = ft_timestamp();
 	program->is_dead = 0;
+	program->all_eaten = 0;
 	if (ac == 6)
 	{
 		program->n_snack = ft_atoi(av[5]);
@@ -43,6 +44,13 @@ static void	ft_valid_arg(int ac, char **av, t_program *program)
 	}
 	else
 		program->n_snack = 0;
+}
+
+void	set_eaten(t_philo *philo, int value)
+{
+	pthread_mutex_lock(philo->messager);
+	philo->eaten = value;
+	pthread_mutex_unlock(philo->messager);
 }
 
 int	main(int ac, char **av)
@@ -54,7 +62,7 @@ int	main(int ac, char **av)
 	pthread_mutex_t	messager;
 
 	ft_valid_arg(ac, av, &program);
-	init_program_mutex(&program);
+	pthread_mutex_init(&program.program_mutex, NULL);
 	philo = (t_philo *)malloc(sizeof(t_philo) * program.n_philo);
 	thread = (pthread_t *)malloc(sizeof(pthread_t) * program.n_philo);
 	fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * program.n_philo);

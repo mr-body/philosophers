@@ -29,29 +29,30 @@ typedef struct s_program
 	int				t_eat;
 	int				n_snack;
 	int				is_dead;
+	int				all_eaten;
 	unsigned long	time;
 	pthread_mutex_t	program_mutex;
-}	t_program;
+}					t_program;
 
 typedef struct s_philo
 {
 	int				id;
 	unsigned long	last_snack;
 	int				eaten;
-	pthread_mutex_t	*fork_left;
-	pthread_mutex_t	*fork_right;
+	int				no_eat;
 	pthread_mutex_t	*messager;
+	pthread_mutex_t	*fork;
 	t_program		*program;
-}	t_philo;
+}					t_philo;
 
 unsigned long		display_time(t_philo *philo);
 unsigned long		ft_timestamp(void);
 
 void				*ft_routine(void *ptr);
 int					ft_monitoring(t_philo *philos);
-void				ft_messager(t_philo *philo, char *info, char *icon);
+void				ft_messager(t_philo *philo, char *info, char *color);
 
-void				ft_init_philo(t_philo *philo, pthread_mutex_t *fork,
+void				ft_init_philo(t_philo *philo, pthread_mutex_t *forks,
 						pthread_mutex_t *messager, t_program *program);
 void				ft_init_mutex(pthread_mutex_t *messager,
 						pthread_mutex_t *fork, int n_philo);
@@ -66,6 +67,10 @@ void				destroy_program_mutex(t_program *program);
 void				set_is_dead(t_program *program, int value);
 void				set_last_snack(t_philo *philo, unsigned long int value);
 int					get_is_dead(t_program *program);
+void				set_all_eaten(t_program *program, int value);
+void				set_no_eat(t_philo *philo, int value);
+int					get_no_eat(t_philo *philo);
+int					get_all_eaten(t_program *program);
 int					get_n_snack(t_program *program);
 int					get_n_philo(t_program *program);
 int					get_t_dead(t_program *program);
