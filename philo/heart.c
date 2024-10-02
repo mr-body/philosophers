@@ -44,12 +44,11 @@ void	*ft_routine(void *ptr)
 
 	philo = (t_philo *)ptr;
 	if (philo->program->n_philo == 1)
-	{
 		return (case_one(philo), NULL);
-	}
 	while (!get_is_dead(philo->program))
 	{
-		ft_take_forks(philo);
+		if (get_no_eat(philo) == 0)
+			ft_take_forks(philo);
 		if (philo->no_eat == 0)
 			ft_messager(philo, "is eating", "\033[0;32m");
 		set_last_snack(philo, ft_timestamp());
@@ -99,7 +98,7 @@ int	ft_monitoring(t_philo *philos)
 		while (++i < program->n_philo)
 		{
 			if (ft_timestamp() - get_last_snack(&philos[i])
-				> (unsigned long)(program->t_dead + 4))
+				> (unsigned long)(program->t_dead) + 4)
 			{
 				ft_messager(&philos[i], "is dead", "\033[0;31m");
 				set_is_dead(program, 1);

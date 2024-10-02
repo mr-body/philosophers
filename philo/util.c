@@ -38,7 +38,7 @@ int	ft_atoi(char *str)
 	if (ft_varg(str))
 	{
 		printf("error: invalid argument\n");
-		exit(1);
+		return (-1);
 	}
 	while (*str == ' ' || (*str >= 9 && *str <= 13))
 		str++;
@@ -63,8 +63,7 @@ unsigned long	ft_timestamp(void)
 
 	if (gettimeofday(&timespamp, NULL) != 0)
 	{
-		perror("Failed to get time");
-		exit(EXIT_FAILURE);
+		printf("Failed to get time");
 	}
 	s = (timespamp.tv_sec * 1000);
 	u = (timespamp.tv_usec / 1000);

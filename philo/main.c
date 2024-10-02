@@ -12,7 +12,7 @@
 
 #include "philosophers.h"
 
-static void	ft_exit_arg(int code)
+static int	ft_exit_arg(int code)
 {
 	if (code == 501)
 		printf("use: ./philosophers philo dead eat sleep [snack]\n");
@@ -20,15 +20,18 @@ static void	ft_exit_arg(int code)
 		printf("The Philo number cannot exceed 200\n");
 	else if (code == 503)
 		printf("The number of snacks must be positive or greater than 0\n");
-	exit(1);
+	return (1);
 }
 
-static void	ft_valid_arg(int ac, char **av, t_program *program)
+static int	ft_valid_arg(int ac, char **av, t_program *program)
 {
 	if (ac > 6 || ac < 5)
-		ft_exit_arg(501);
+		return (ft_exit_arg(501));
+	if ((ft_atoi(av[1]) == -1) || (ft_atoi(av[2]) == -1)
+		|| (ft_atoi(av[3]) == -1) || (ft_atoi(av[4]) == -1))
+		return (1);
 	if ((ft_atoi(av[1]) > MAX_PHILO))
-		ft_exit_arg(502);
+		return (ft_exit_arg(502));
 	program->n_philo = ft_atoi(av[1]);
 	program->t_dead = ft_atoi(av[2]);
 	program->t_eat = ft_atoi(av[3]);
@@ -40,10 +43,11 @@ static void	ft_valid_arg(int ac, char **av, t_program *program)
 	{
 		program->n_snack = ft_atoi(av[5]);
 		if (program->n_snack <= 0)
-			ft_exit_arg(503);
+			return (ft_exit_arg(503));
 	}
 	else
 		program->n_snack = 0;
+	return (0);
 }
 
 void	set_eaten(t_philo *philo, int value)
@@ -61,7 +65,8 @@ int	main(int ac, char **av)
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	messager;
 
-	ft_valid_arg(ac, av, &program);
+	if (ft_valid_arg(ac, av, &program))
+		return (0);
 	pthread_mutex_init(&program.program_mutex, NULL);
 	philo = (t_philo *)malloc(sizeof(t_philo) * program.n_philo);
 	thread = (pthread_t *)malloc(sizeof(pthread_t) * program.n_philo);

@@ -41,15 +41,15 @@ void	ft_init_mutex(pthread_mutex_t *fork, pthread_mutex_t *messager,
 	{
 		if (pthread_mutex_init(&fork[i], NULL) != 0)
 		{
-			perror("Failed to initialize mutex");
-			exit(EXIT_FAILURE);
+			printf("Failed to initialize mutex");
+			return ;
 		}
 		i++;
 	}
 	if (pthread_mutex_init(messager, NULL) != 0)
 	{
-		perror("Failed to initialize message mutex");
-		exit(EXIT_FAILURE);
+		printf("Failed to initialize message mutex");
+		return ;
 	}
 }
 
@@ -62,8 +62,8 @@ void	ft_pthread_create(pthread_t *thread, t_philo *philo, int n_philo)
 	{
 		if (pthread_create(&thread[i], NULL, &ft_routine, &philo[i]) != 0)
 		{
-			perror("Failed to create thread");
-			exit(EXIT_FAILURE);
+			printf("Failed to create thread");
+			return ;
 		}
 		usleep(100);
 		i++;
@@ -79,8 +79,8 @@ void	ft_join_thread(pthread_t *thread, int n_philo)
 	{
 		if (pthread_join(thread[i], NULL) != 0)
 		{
-			perror("Failed to join thread");
-			exit(EXIT_FAILURE);
+			printf("Failed to join thread");
+			return ;
 		}
 		i++;
 	}
